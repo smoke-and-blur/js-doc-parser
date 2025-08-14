@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+
+<script crossorigin src="https://unpkg.com/jszip/dist/jszip.min.js"></script>
+
+<script src="https://volodymyrbaydalka.github.io/docxjs/dist/docx-preview.js"></script>
+
+<style>
+    #output{
+        visibility: hidden;
+    }
+</style>
+
+<form>
+    <input type="file" id="f">
+</form>
+
+<p id="result"></p>
+
+18:00 - 18:00
+<p id="output"></p>
+
+<script>
+    const docxOptions = Object.assign(
+        docx.defaultOptions,
+        {
+            debug: true,
+            experimental: true,
+            hideWrapperOnPrint: true
+        }
+    );
+
+    const fileInput = document.getElementById("f");
+    const container = document.getElementById("output")
+    const result = document.getElementById("result")
+
+    fileInput.addEventListener(
+        "change",
+        async function (e) {
+            const m = new Map();
+            let docxBlob = e.target.files[0]
+            let res = await docx.renderAsync(docxBlob, container, null, docxOptions)
+            console.log(res);
+
+            
+
+            res.documentPart.body.children.forEach(toplevel => {
+                if (toplevel.type !== "table") {
+                    return
+                }
+
+                console.log("toplevel", toplevel.children)
+
+                var rows = toplevel.children.slice(1)
+
+            result.innerText = `Всього: ${rows.length}\n`
+
+
+                // row -> paragraph -> run -> text
+                rows.forEach(row => {
+                    // const cell = row.children[6] // 7th cell
+                    const cell = row.children[6]
+                    const paragraph = cell.children[0]
+                    const run = paragraph.children[0]
+                    const text = run.children[0]
+                    const t = text.text.trim()
+                    let n = m.get(t)
+                    console.log(n)
+                    if (n === undefined) {
+                        n = 0
+                    }
+                    m.set(t, n + 1)
+                })
+            });
+
+            console.log(m)
+
+
+            m.forEach(
+                (value, key) => {
+                    result.innerText += `${key}: ${value}\n`
+                }
+            )
+
+        }
+    );
+
+</script>
