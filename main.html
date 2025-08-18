@@ -5,7 +5,7 @@
 <script src="https://volodymyrbaydalka.github.io/docxjs/dist/docx-preview.js"></script>
 
 <style>
-    #output{
+    #output {
         visibility: hidden;
     }
 </style>
@@ -14,11 +14,23 @@
     <input type="file" id="f">
 </form>
 
+<label for="filter">18+</label>
+<input id="filter" type="checkbox">
+
 <p id="result"></p>
 
 <p id="output"></p>
 
 <script>
+    textFromCell = function (row, n) {
+        const cell = row.children[n]
+        const paragraph = cell.children[0]
+        const run = paragraph.children[0]
+        const text = run.children[0]
+        const t = text.text.trim()
+        return t
+    }
+
     const docxOptions = Object.assign(
         docx.defaultOptions,
         {
@@ -31,48 +43,42 @@
     const fileInput = document.getElementById("f");
     const container = document.getElementById("output")
     const result = document.getElementById("result")
+    const filter = document.getElementById("filter")
 
     fileInput.addEventListener(
         "change",
         async function (e) {
+            var total = 0
             const m = new Map();
             let docxBlob = e.target.files[0]
             let res = await docx.renderAsync(docxBlob, container, null, docxOptions)
-            console.log(res);
-
-            
 
             res.documentPart.body.children.forEach(toplevel => {
                 if (toplevel.type !== "table") {
                     return
                 }
 
-                console.log("toplevel", toplevel.children)
-
                 var rows = toplevel.children.slice(1)
-
-            result.innerText = `Всього: ${rows.length}\n`
-
 
                 // row -> paragraph -> run -> text
                 rows.forEach(row => {
-                    // const cell = row.children[6] // 7th cell
-                    const cell = row.children[6]
-                    const paragraph = cell.children[0]
-                    const run = paragraph.children[0]
-                    const text = run.children[0]
-                    const t = text.text.trim()
+                    const end = parseInt(textFromCell(row, 5).slice(0, 2))
+
+                    if (filter.checked && end < 18) {
+                        return
+                    }
+
+                    const t = textFromCell(row, 6)
                     let n = m.get(t)
-                    console.log(n)
                     if (n === undefined) {
                         n = 0
                     }
                     m.set(t, n + 1)
+                    total++
                 })
             });
 
-            console.log(m)
-
+            result.innerText = `Всього: ${total}\n`
 
             m.forEach(
                 (value, key) => {
@@ -82,6 +88,5 @@
 
         }
     );
-
 
 </script>
