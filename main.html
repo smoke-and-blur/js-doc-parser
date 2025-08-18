@@ -26,6 +26,9 @@
         const cell = row.children[n]
         const paragraph = cell.children[0]
         const run = paragraph.children[0]
+        if (run.children.length < 1) {
+            return ""
+        }
         const text = run.children[0]
         const t = text.text.trim()
         return t
@@ -62,7 +65,13 @@
 
                 // row -> paragraph -> run -> text
                 rows.forEach(row => {
-                    const end = parseInt(textFromCell(row, 5).slice(0, 2))
+                    let timing = textFromCell(row, 5)
+
+                    if (timing === "") {
+                        return
+                    }
+
+                    const end = parseInt(timing.slice(0, 2))
 
                     if (filter.checked && end < 18) {
                         return
