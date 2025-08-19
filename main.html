@@ -8,16 +8,31 @@
     #output {
         visibility: hidden;
     }
+
+    #primary * {
+        font-size: 18px;
+    }
+
+    #filter {
+        height: 18px;
+        width: 18px;
+    }
 </style>
 
-<form>
-    <input type="file" id="f">
-</form>
+<div id="primary">
+    <form>
+        <input type="file" id="f">
+    </form>
 
-<label for="filter">18+</label>
-<input id="filter" type="checkbox">
+    <label for="filter">18+</label>
+    <input id="filter" type="checkbox">
 
-<p id="result"></p>
+    <noscript>Увага, JavaScript не увімкнено!</noscript>
+
+    <p id="status"></p>
+
+    <p id="result"></p>
+</div>
 
 <p id="output"></p>
 
@@ -47,45 +62,57 @@
     const container = document.getElementById("output")
     const result = document.getElementById("result")
     const filter = document.getElementById("filter")
+    const status = document.getElementById("status")
 
     fileInput.addEventListener(
         "change",
         async function (e) {
+            status.innerText = ""
             var total = 0
             const m = new Map();
             let docxBlob = e.target.files[0]
-            let res = await docx.renderAsync(docxBlob, container, null, docxOptions)
+            status.innerText = `loading document...`
 
-            res.documentPart.body.children.forEach(toplevel => {
-                if (toplevel.type !== "table") {
-                    return
-                }
+            try {
+                let res = await docx.renderAsync(docxBlob, container, null, docxOptions)
 
-                var rows = toplevel.children.slice(1)
+                status.innerText += ` document loaded...`
 
-                // row -> paragraph -> run -> text
-                rows.forEach(row => {
-                    let timing = textFromCell(row, 5)
-
-                    if (timing === "") {
+                res.documentPart.body.children.forEach(toplevel => {
+                    if (toplevel.type !== "table") {
                         return
                     }
 
-                    const end = parseInt(timing.slice(0, 2))
+                    status.innerText += ` found table, parsing...`
 
-                    if (filter.checked && end < 18) {
-                        return
-                    }
+                    var rows = toplevel.children.slice(1)
 
-                    const t = textFromCell(row, 6)
-                    let n = m.get(t)
-                    if (n === undefined) {
-                        n = 0
-                    }
-                    m.set(t, n + 1)
-                    total++
-                })
-            });
+                    // row -> paragraph -> run -> text
+                    rows.forEach(row => {
+                        let timing = textFromCell(row, 5)
+
+                        if (timing === "") {
+                            return
+                        }
+
+                        const end = parseInt(timing.slice(0, 2))
+
+                        if (filter.checked && end < 18) {
+                            return
+                        }
+
+                        const t = textFromCell(row, 6)
+                        let n = m.get(t)
+                        if (n === undefined) {
+                            n = 0
+                        }
+                        m.set(t, n + 1)
+                        total++
+                    })
+                });
+            } catch (error) {
+                status.innerText += ` error: ${error}`
+            }
 
             result.innerText = `Всього: ${total}\n`
 
