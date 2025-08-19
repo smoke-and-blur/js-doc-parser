@@ -41,11 +41,20 @@
 <script>
     textFromCell = function (row, n) {
         const cell = row.children[n]
+        if (cell.children.length < 1) {
+            return ""
+        }
+
         const paragraph = cell.children[0]
+        if (paragraph.children.length < 1) {
+            return ""
+        }
+
         const run = paragraph.children[0]
         if (run.children.length < 1) {
             return ""
         }
+
         const text = run.children[0]
         const t = text.text.trim()
         return t
