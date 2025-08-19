@@ -90,8 +90,10 @@
                     var rows = toplevel.children.slice(1)
 
                     // row -> paragraph -> run -> text
-                    rows.forEach(row => {
+                    rows.forEach((row, index) => {
                         let timing = textFromCell(row, 5)
+
+                        status.innerText += `row: ${index}\n`
 
                         if (timing === "") {
                             return
