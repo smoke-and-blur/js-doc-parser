@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<script crossorigin src="https://unpkg.com/jszip/dist/jszip.min.js"></script>
+
+<script src="https://volodymyrbaydalka.github.io/docxjs/dist/docx-preview.js"></script>
+
+<style>
+    #output {
+        visibility: hidden;
+    }
+
+    #primary * {
+        font-size: 18px;
+    }
+
+    #filter {
+        height: 18px;
+        width: 18px;
+    }
+
+    #result * {
+        border: solid 1px #eee;
+        padding: 9px;
+        border-collapse: collapse;
+    }
+</style>
+
+<div id="primary">
+    <form>
+        <input type="file" id="f">
+    </form>
+
+    <label for="filter">18+</label>
+    <input id="filter" type="checkbox">
+
+    <noscript>Увага, JavaScript не увімкнено!</noscript>
+
+    <p id="status"></p>
+
+    <div id="result">
+    </div>
+
+    <p id="output"></p>
+
+    <script>
+        textFromCell = function (row, n) {
+            const cell = row.children[n]
+            if (cell.children.length < 1) {
+                return ""
+            }
+
+            const paragraph = cell.children[0]
+            if (paragraph.children.length < 1) {
+                return ""
+            }
+
+            const run = paragraph.children[0]
+            if (run.children.length < 1) {
+                return ""
+            }
+
+            const text = run.children[0]
+            const t = text.text.trim()
+            return t
+        }
+
+        const docxOptions = Object.assign(
+            docx.defaultOptions,
+            {
+                debug: true,
+                experimental: true,
+                hideWrapperOnPrint: true
+            }
+        );
+
+        const fileInput = document.getElementById("f");
+        const container = document.getElementById("output")
+        const result = document.getElementById("result")
+        const filter = document.getElementById("filter")
+        const status = document.getElementById("status")
+
+        fileInput.addEventListener(
+            "change",
+            async function (e) {
+                status.innerText = ""
+                var total = 0
+                const m = new Map();
+                const other = new Map();
+
+                let items = [
+                    "впс «Кодима»",
+                    "віпс «Загнітків»",
+                    "віпс «Шершенці»",
+                    "впс «Станіславка»",
+                    "віпс «Тимкове»",
+                    "віпс «Чорна»",
+                    "впс «Окни»",
+                    "віпс «Ткаченкове»",
+                    "віпс «Гулянка»",
+                    "віпс «Новосеменівка»",
+                    "впс «Великокомарівка»",
+                    "віпс «Павлівка»",
+                    "впс «Велика Михайлівка»",
+                    "віпс «Слов’яносербка»",
+                    "віпс «Гребеники»",
+                    "впс «Степанівка»",
+                    "віпс «Лучинське»",
+                    "віпс «Кучурган»",
+                    "віпс «Лиманське»",
+                ]
+
+                for (item of items) {
+                    m.set(item, 0)
+                }
+
+                let docxBlob = e.target.files[0]
+                status.innerText = `loading document...`
+
+                try {
+                    let res = await docx.renderAsync(docxBlob, container, null, docxOptions)
+
+                    status.innerText = `document loaded...`
+
+                    res.documentPart.body.children.forEach(toplevel => {
+                        if (toplevel.type !== "table") {
+                            return
+                        }
+
+                        status.innerText = `found table, parsing...`
+
+                        var rows = toplevel.children.slice(1)
+
+                        // row -> paragraph -> run -> text
+                        rows.forEach((row, index) => {
+                            let timing = textFromCell(row, 5)
+
+                            if (timing === "") {
+                                return
+                            }
+
+                            const end = parseInt(timing.slice(0, 2))
+
+                            if (filter.checked && end < 18) {
+                                return
+                            }
+
+                            console.log(index, end)
+
+                            let t = textFromCell(row, 6)
+
+                            // remove all whitespace and insert a single one
+                            // https://stackoverflow.com/questions/3286874/remove-all-multiple-spaces-in-javascript-and-replace-with-single-space
+                            t.replace(/ +(?= )/g, '');
+
+                            let n = m.get(t)
+                            if (n === undefined) {
+                                let n = other.get(t)
+                                if (n=== undefined) {
+                                    n=0
+                                }
+                                other.set(t, n+1)
+                                // otherTotal++
+                                return
+                            }
+                            m.set(t, n + 1)
+                            total++
+                        })
+                    });
+                } catch (error) {
+                    status.innerText += ` error: ${error}`
+                }
+
+                status.innerText = ""
+
+                var content = ""
+
+                content += `<tr><th>Назва</th><th>Кількість польотів</th></tr>`
+
+                for (var [key, value] of m) {
+                    content += `<tr><td>${key}</td><td align="right">${value}</td></tr>\n`
+                }
+
+                content += `<tr><td>Всього</td><td align="right">${total}</td></tr>\n`
+
+                result.innerHTML = `<table>${content}</table>`
+
+                content = ""
+
+                content += `<tr><th>Назва</th><th>Кількість польотів</th></tr>`
+
+                for (var [key, value] of other) {
+                    content += `<tr><td>${key}</td><td align="right">${value}</td></tr>\n`
+                }
+
+                content += `<tr><td>Всього</td><td align="right">???</td></tr>\n`
+
+                result.innerHTML += `<table>${content}</table>`
+            }
+        );
+
+    </script>
