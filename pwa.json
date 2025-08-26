@@ -2,6 +2,7 @@
   "name": "Doc Parser",
   "start_url": "/",
   "display": "standalone",
+  "descirption": "The app to parse doc files (internal use only)",
   "icons": [
     {
       "src": "parser-icon-v1.svg",
