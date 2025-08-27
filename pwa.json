@@ -12,11 +12,16 @@
   ],
   "icons": [
     {
+      "src": "parser-icon-any.png",
+      "sizes": "any",
+      "purpose": "any"
+    },
+    {
       "src": "parser-icon-v1.svg",
       "sizes": "any",
       "purpose": "maskable"
     },
-     {
+    {
       "src": "maskable-icon.svg",
       "sizes": "any",
       "purpose": "monochrome"
