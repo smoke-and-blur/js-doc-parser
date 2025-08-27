@@ -13,7 +13,11 @@
   "icons": [
     {
       "src": "parser-icon-v1.svg",
-      "sizes": "any"
+      "sizes": "maskable"
+    },
+     {
+      "src": "maskable-icon.svg",
+      "sizes": "monochrome"
     }
   ],
   "share_target": {
