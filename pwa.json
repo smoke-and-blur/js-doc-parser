@@ -2,10 +2,10 @@
   "file_handlers": [
     {
       "action": "/",
-      "accept": [
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-        "application/msword"
-      ]
+      "accept": {
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [".docx"],
+        "application/msword": [".doc"]
+      }
     }
   ],
   "name": "Doc Parser",
