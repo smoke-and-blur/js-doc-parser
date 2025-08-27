@@ -13,7 +13,7 @@
   "icons": [
     {
       "src": "parser-icon-any.png",
-      "sizes": "any",
+      "sizes": "1024x1024",
       "purpose": "any"
     },
     {
