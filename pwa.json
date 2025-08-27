@@ -1,4 +1,13 @@
 {
+  "file_handlers": [
+    {
+      "action": "/",
+      "accept": [
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "application/msword"
+      ]
+    }
+  ],
   "name": "Doc Parser",
   "start_url": "/",
   "display": "standalone",
