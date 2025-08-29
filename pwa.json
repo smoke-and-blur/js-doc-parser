@@ -1,13 +1,4 @@
 {
-  "file_handlers": [
-    {
-      "action": "/",
-      "accept": {
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [".docx"],
-        "application/msword": [".doc"]
-      }
-    }
-  ],
   "name": "Doc Parser",
   "start_url": "/",
   "display": "standalone",
@@ -37,13 +28,10 @@
     }
   ],
   "share_target": {
-    "action": "/",
+    "action": "/share-target",
     "method": "POST",
     "enctype": "multipart/form-data",
     "params": {
-      "title": "name",
-      "text": "description",
-      "url": "link",
       "files": [
         {
           "name": "in",
