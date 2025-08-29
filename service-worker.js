@@ -3,6 +3,8 @@ self.addEventListener("fetch", (event) => {
 
   if (url.pathname !== "/share-target" || event.request.method !== "POST") return;
 
+  console.log("share happened")
+
   event.respondWith((async () => {
     const formData = await event.request.formData();
     const files = formData.getAll("in"); // 'in' matches manifest
