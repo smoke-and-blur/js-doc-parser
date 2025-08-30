@@ -7,6 +7,8 @@ self.addEventListener("fetch", (event) => {
 
   console.log("share happened")
 
+  console.log("request", event.request)
+
   event.respondWith((async () => {
     try {
       const formData = await event.request.formData();
@@ -44,6 +46,8 @@ self.addEventListener("fetch", (event) => {
       return new Response(html, { headers: { "Content-Type": "text/html" } });
     } catch (e) {
       console.log("error:", e)
+      return new Response(`<h1>Error</h1>`, { headers: { "Content-Type": "text/html" } });
+
     }
   })());
 });
