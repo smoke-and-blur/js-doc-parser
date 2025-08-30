@@ -8,6 +8,7 @@ self.addEventListener("fetch", (event) => {
   console.log("share happened")
   
   event.respondWith((async () => {
+    try {
     const formData = await event.request.formData();
     const files = formData.getAll("in"); // 'in' matches manifest
 
@@ -38,6 +39,9 @@ self.addEventListener("fetch", (event) => {
       </body>
       </html>
     `;
+  } catch (e) {
+    console.log("error:", e)
+  }
 
     return new Response(html, { headers: { "Content-Type": "text/html" } });
   })());
