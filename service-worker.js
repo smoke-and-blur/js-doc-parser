@@ -6,29 +6,29 @@ self.addEventListener("fetch", (event) => {
   }
 
   console.log("share happened")
-  
+
   event.respondWith((async () => {
     try {
-    const formData = await event.request.formData();
-    const files = formData.getAll("in"); // 'in' matches manifest
+      const formData = await event.request.formData();
+      const files = formData.getAll("in"); // 'in' matches manifest
 
-    let filenames = ""
+      let filenames = ""
 
-    for (let file of files) {
-      console.log(file.name, file.size)
-      filenames += file.name + "\n"
-    }
+      for (let file of files) {
+        console.log(file.name, file.size)
+        filenames += file.name + "\n"
+      }
 
-    // // Send files to the page
-    // const clientsArr = await self.clients.matchAll({ type: "window" });
-    // if (clientsArr.length > 0) {
-    //   clientsArr[0].postMessage({ action: "share", files });
-    // }
+      // // Send files to the page
+      // const clientsArr = await self.clients.matchAll({ type: "window" });
+      // if (clientsArr.length > 0) {
+      //   clientsArr[0].postMessage({ action: "share", files });
+      // }
 
 
 
-    // Respond with a basic HTML page with your form
-    const html = `
+      // Respond with a basic HTML page with your form
+      const html = `
       <!DOCTYPE html>
       <meta charset="utf-8">
       <html>
@@ -39,10 +39,11 @@ self.addEventListener("fetch", (event) => {
       </body>
       </html>
     `;
-  } catch (e) {
-    console.log("error:", e)
-  }
 
-    return new Response(html, { headers: { "Content-Type": "text/html" } });
+
+      return new Response(html, { headers: { "Content-Type": "text/html" } });
+    } catch (e) {
+      console.log("error:", e)
+    }
   })());
 });
