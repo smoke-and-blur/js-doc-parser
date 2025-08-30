@@ -9,6 +9,10 @@ self.addEventListener("fetch", (event) => {
     const formData = await event.request.formData();
     const files = formData.getAll("in"); // 'in' matches manifest
 
+    for (let file of files) {
+      console.log(file.name, file.size)
+    }
+
     // Send files to the page
     const clientsArr = await self.clients.matchAll({ type: "window" });
     if (clientsArr.length > 0) {
