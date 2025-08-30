@@ -1,6 +1,6 @@
 self.addEventListener("fetch", (event) => {
   const url = new URL(event.request.url);
-  if (url.pathname !== "/share-target" || event.request.method !== "POST") {
+  if (url.pathname !== "/share-target" || event.request.method !== "POST" || event.request.mode !== "navigate") {
     event.respondWith(fetch(event.request))
     return
   }
