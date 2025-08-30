@@ -1,10 +1,12 @@
 self.addEventListener("fetch", (event) => {
   const url = new URL(event.request.url);
-
-  if (url.pathname !== "/share-target" || event.request.method !== "POST") return;
+  if (url.pathname !== "/share-target" || event.request.method !== "POST") {
+    event.respondWith(fetch(event.request))
+    return
+  }
 
   console.log("share happened")
-
+  
   event.respondWith((async () => {
     const formData = await event.request.formData();
     const files = formData.getAll("in"); // 'in' matches manifest
@@ -13,7 +15,7 @@ self.addEventListener("fetch", (event) => {
 
     for (let file of files) {
       console.log(file.name, file.size)
-      filenames+=file.name+"\n"
+      filenames += file.name + "\n"
     }
 
     // // Send files to the page
@@ -27,6 +29,7 @@ self.addEventListener("fetch", (event) => {
     // Respond with a basic HTML page with your form
     const html = `
       <!DOCTYPE html>
+      <meta charset="utf-8">
       <html>
       <head><title>Edit Shared Files</title></head>
       <body>
