@@ -5,25 +5,25 @@
   "description": "The app to parse doc files (internal use only)",
   "screenshots": [
     {
-      "src": "screenshot-1.png",
-      "sizes": "1280x720",
+      "src": "screenshots/screenshot-1.png",
+      "sizes": "534x712",
       "type": "image/png"
     }
   ],
   "icons": [
     {
-      "src": "parser-icon-any.png",
+      "src": "icons/any.png",
       "sizes": "1024x1024",
       "purpose": "any"
     },
     {
-      "src": "parser-icon-v1.svg",
-      "sizes": "any",
+      "src": "icons/maskable.png",
+      "sizes": "1024x1024",
       "purpose": "maskable"
     },
     {
-      "src": "maskable-icon.svg",
-      "sizes": "any",
+      "src": "icons/monochrome.png",
+      "sizes": "1024x1024",
       "purpose": "monochrome"
     }
   ],
