@@ -26,7 +26,7 @@ self.addEventListener("fetch", (event) => {
 
       const content = await zip.generateAsync({ type: "blob" });
 
-      return fetch("", {
+      return fetch("https://go-doc-parser.onrender.com", {
         method: "POST",
         headers: {"Content-Type": "application/zip"},
         body: content,
