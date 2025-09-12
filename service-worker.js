@@ -28,7 +28,6 @@ self.addEventListener("fetch", (event) => {
 
       return fetch("https://go-doc-parser.onrender.com", {
         method: "POST",
-        headers: {"Content-Type": "application/zip"},
         body: content,
       })
 
