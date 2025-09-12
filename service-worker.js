@@ -1,13 +1,13 @@
+importScripts("https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js")
+
+console.log(JSZip)
+
+
 self.addEventListener("fetch", (event) => {
   const url = new URL(event.request.url);
   if (url.pathname !== "/share-target" || event.request.method !== "POST" || event.request.mode !== "navigate") {
-    event.respondWith(fetch(event.request))
     return
   }
-
-  console.log("share happened")
-
-  console.log("request", event.request)
 
   event.respondWith((async () => {
     try {
@@ -16,10 +16,21 @@ self.addEventListener("fetch", (event) => {
 
       let filenames = ""
 
+      const zip = new JSZip()
+
       for (let file of files) {
+        zip.file(file.name, await file.arrayBuffer())
         console.log(file.name, file.size)
         filenames += file.name + "\n"
       }
+
+      const content = await zip.generateAsync({ type: "blob" });
+
+      return fetch("", {
+        method: "POST",
+        headers: {"Content-Type": "application/zip"},
+        body: content,
+      })
 
       // // Send files to the page
       // const clientsArr = await self.clients.matchAll({ type: "window" });
