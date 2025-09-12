@@ -26,30 +26,79 @@
     registerServiceWorker();
 </script>
 
-<form action="https://go-doc-parser.onrender.com" method="POST">
-    <input type="file">
-    <input type="submit">
-</form>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        text-wrap: wrap;
+    }
 
-<pre>Для роботи на Android та PC
-1. Додати цю сторінку як застосунок <b>Doc Parser</b> на робочий стіл
-2. Поділитися одним або декількома DOCX-файлами з цим застосунком</pre>
-<img width="240" src="manual/android-installation-1.png">
-<br>
-<img width="240" src="manual/android-installation-2.png">
-<br>
-<img width="240" src="manual/android-1.png">
-<br>
-<img width="240" src="manual/android-2.png">
+    img {
+        max-width: 240px;
+        border-radius: 16px;
+        display: block;
+    }
 
-<pre>Для роботи на iPhone
-1. Переконатися, що встановлено застосунок <a href="https://apps.apple.com/us/app/shortcuts/id915249334">Shortcuts</a>
-2. Завантажити <a href="#">Shortcut</a> <b>Flight Parser</b>
-3. Поділитися одним або декількома DOCX-файлами через цей Shortcut</pre>
+    .section {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
 
-<pre>Для роботи через cURL
-# 1. Запакувати документи у ZIP-архів
-...
-# 2. Надіслати архів до серверу для обробки та зберегти результат у вигляді HTML-сторінки
-curl https://go-doc-parser.onrender.com -F "in=@documents.zip" > out.html
-</pre>
+    .container {
+        margin: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        max-width: 800px;
+    }
+
+    form {
+        grid-column: span 2;
+    }
+</style>
+
+
+
+<div class="container">
+    <form id="form" action="https://go-doc-parser.onrender.com" method="POST">
+        <input type="file">
+        <input type="submit">
+    </form>
+    <details>
+        <summary>Для роботи на Android та PC</summary>
+        <div class="section">
+        <p>1. Додати цю сторінку як застосунок <b>Doc Parser</b> на робочий стіл</p>
+        <p>2. Поділитися одним або декількома DOCX-файлами з цим застосунком</p>
+        <img src="manual/android-installation-1.png">
+        <img src="manual/android-installation-2.png">
+        <img src="manual/android-1.png">
+        <img src="manual/android-2.png">
+        </div>
+    </details>
+    <details>
+            <summary>Для роботи на iPhone</summary>
+            <div class="section">
+            <p>1. Переконатися, що встановлено застосунок <a
+                    href="https://apps.apple.com/us/app/shortcuts/id915249334">Shortcuts</a></p>
+            <p>2. Завантажити <a href="#">Shortcut</a> <b>Flight Parser</b></p>
+            <p>3. Поділитися одним або декількома DOCX-файлами через цей Shortcut</p>
+            </div>
+    </details>
+        <details>
+            <summary>Для роботи через cURL</summary>
+            <div class="section">
+            <p>1. Запакувати документи у ZIP-архів</p>
+            <p>2. Надіслати архів до серверу для обробки та зберегти результат у вигляді HTML-сторінки</p>
+            <pre>curl https://go-doc-parser.onrender.com -F "in=@documents.zip" > out.html</pre>
+            </div>
+        </details>
+</div>
+
+<!-- <script>
+    form = document.getElementById('form')
+    form.attachEvent("submit", (e) => {
+        e.preventDefault();
+    })
+</script> -->
