@@ -26,10 +26,27 @@
     registerServiceWorker();
 </script>
 
+<form action="https://go-doc-parser.onrender.com" method="POST">
+    <input type="file">
+    <input type="submit">
+</form>
+
 <pre>Для роботи на Android та PC
-1. Додати цю сторінку як застосунок на робочий стіл
+1. Додати цю сторінку як застосунок <b>Doc Parser</b> на робочий стіл
 2. Поділитися одним або декількома DOCX-файлами з цим застосунком</pre>
 
+<img src="manual/android-1.png">
+
+<img src="manual/android-2.png">
+
 <pre>Для роботи на iPhone
-1. Завантажити <a href="#">Shortcut</a>
-2. Поділитися одним або декількома DOCX-файлами з цим застосунком </pre>
+1. Переконатися, що встановлено застосунок <a href="https://apps.apple.com/us/app/shortcuts/id915249334">Shortcuts</a>
+2. Завантажити <a href="#">Shortcut</a> <b>Flight Parser</b>
+3. Поділитися одним або декількома DOCX-файлами через цей Shortcut</pre>
+
+<pre>Для роботи через cURL
+# 1. Запакувати документи у ZIP-архів
+...
+# 2. Надіслати архів до серверу для обробки та зберегти результат у вигляді HTML-сторінки
+curl https://go-doc-parser.onrender.com -F "in=@documents.zip" > out.html
+</pre>
