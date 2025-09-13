@@ -75,31 +75,35 @@
     <details>
         <summary>Для роботи на Android та PC</summary>
         <div class="section">
-        <p>1. Додати цю сторінку як застосунок <b>Doc Parser</b> на робочий стіл</p>
-        <p>2. Поділитися одним або декількома DOCX-файлами з цим застосунком</p>
-        <img src="manual/android-installation-1.png">
-        <img src="manual/android-installation-2.png">
-        <img src="manual/android-1.png">
-        <img src="manual/android-2.png">
+            <p>1. Додати цю сторінку як застосунок <b>Doc Parser</b> на робочий стіл</p>
+            <p>2. Поділитися одним або декількома DOCX-файлами з цим застосунком</p>
+            <img src="manual/android-installation-1.png">
+            <img src="manual/android-installation-2.png">
+            <img src="manual/android-1.png">
+            <img src="manual/android-2.png">
         </div>
     </details>
     <details>
-            <summary>Для роботи на iPhone</summary>
-            <div class="section">
+        <summary>Для роботи на iPhone</summary>
+        <div class="section">
             <p>1. Переконатися, що встановлено застосунок <a
                     href="https://apps.apple.com/us/app/shortcuts/id915249334">Shortcuts</a></p>
             <p>2. Завантажити <a href="shortcuts/Parse Flights.shortcut">Shortcut</a> <b>Flight Parser</b></p>
             <p>3. Поділитися одним або декількома DOCX-файлами через цей Shortcut</p>
-            </div>
+            <img src="manual/ios-1.png">
+            <img src="manual/ios-2.png">
+            <img src="manual/ios-3.png">
+            <img src="manual/ios-4.png">
+        </div>
     </details>
-        <details>
-            <summary>Для роботи через cURL</summary>
-            <div class="section">
+    <details>
+        <summary>Для роботи через cURL</summary>
+        <div class="section">
             <p>1. Запакувати документи у ZIP-архів</p>
             <p>2. Надіслати архів до серверу для обробки та зберегти результат у вигляді HTML-сторінки</p>
             <pre>curl https://go-doc-parser.onrender.com -F "in=@documents.zip" > out.html</pre>
-            </div>
-        </details>
+        </div>
+    </details>
 </div>
 
 <!-- <script>
@@ -114,40 +118,40 @@
     const fileInput = document.getElementById("files");
 
     form.addEventListener("submit", async (e) => {
-      e.preventDefault();
+        e.preventDefault();
 
-      if (!fileInput.files.length) {
-        alert("Please choose at least one file");
-        return;
-      }
+        if (!fileInput.files.length) {
+            alert("Please choose at least one file");
+            return;
+        }
 
-      // Zip selected files
-      const zip = new JSZip();
-      for (const file of fileInput.files) {
-        zip.file(file.name, file);
-      }
-      const blob = await zip.generateAsync({ type: "blob" });
+        // Zip selected files
+        const zip = new JSZip();
+        for (const file of fileInput.files) {
+            zip.file(file.name, file);
+        }
+        const blob = await zip.generateAsync({ type: "blob" });
 
-      // Build a FormData for the upload
-      const formData = new FormData();
-      formData.append("file", blob, "upload.zip");
+        // Build a FormData for the upload
+        const formData = new FormData();
+        formData.append("file", blob, "upload.zip");
 
-      // Build a temporary <form> with a hidden file input (Blob -> File)
-      const tmpForm = document.createElement("form");
-      tmpForm.method = "POST";
-      tmpForm.action = form.action;
-      tmpForm.enctype = "multipart/form-data";
-      tmpForm.style.display = 'none'
+        // Build a temporary <form> with a hidden file input (Blob -> File)
+        const tmpForm = document.createElement("form");
+        tmpForm.method = "POST";
+        tmpForm.action = form.action;
+        tmpForm.enctype = "multipart/form-data";
+        tmpForm.style.display = 'none'
 
-      const dataTransfer = new DataTransfer();
-      dataTransfer.items.add(new File([blob], "upload.zip"));
-      const hiddenInput = document.createElement("input");
-      hiddenInput.type = "file";
-      hiddenInput.name = "file";
-      hiddenInput.files = dataTransfer.files;
-      tmpForm.appendChild(hiddenInput);
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(new File([blob], "upload.zip"));
+        const hiddenInput = document.createElement("input");
+        hiddenInput.type = "file";
+        hiddenInput.name = "file";
+        hiddenInput.files = dataTransfer.files;
+        tmpForm.appendChild(hiddenInput);
 
-      document.body.appendChild(tmpForm);
-      tmpForm.submit(); // triggers a real navigation
+        document.body.appendChild(tmpForm);
+        tmpForm.submit(); // triggers a real navigation
     });
-  </script>
+</script>
