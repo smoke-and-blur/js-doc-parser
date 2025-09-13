@@ -3,6 +3,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="manifest" href="pwa.json" />
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
 <script>
     const registerServiceWorker = async () => {
         if ("serviceWorker" in navigator) {
@@ -57,13 +59,17 @@
     form {
         grid-column: span 2;
     }
+
+    body {
+        padding: 16px;
+    }
 </style>
 
 
 
 <div class="container">
     <form id="form" action="https://go-doc-parser.onrender.com" method="POST">
-        <input type="file">
+        <input id="files" type="file" multiple>
         <input type="submit">
     </form>
     <details>
@@ -102,3 +108,46 @@
         e.preventDefault();
     })
 </script> -->
+
+<script>
+    const form = document.getElementById("form");
+    const fileInput = document.getElementById("files");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      if (!fileInput.files.length) {
+        alert("Please choose at least one file");
+        return;
+      }
+
+      // Zip selected files
+      const zip = new JSZip();
+      for (const file of fileInput.files) {
+        zip.file(file.name, file);
+      }
+      const blob = await zip.generateAsync({ type: "blob" });
+
+      // Build a FormData for the upload
+      const formData = new FormData();
+      formData.append("file", blob, "upload.zip");
+
+      // Build a temporary <form> with a hidden file input (Blob -> File)
+      const tmpForm = document.createElement("form");
+      tmpForm.method = "POST";
+      tmpForm.action = form.action;
+      tmpForm.enctype = "multipart/form-data";
+      tmpForm.style.display = 'none'
+
+      const dataTransfer = new DataTransfer();
+      dataTransfer.items.add(new File([blob], "upload.zip"));
+      const hiddenInput = document.createElement("input");
+      hiddenInput.type = "file";
+      hiddenInput.name = "file";
+      hiddenInput.files = dataTransfer.files;
+      tmpForm.appendChild(hiddenInput);
+
+      document.body.appendChild(tmpForm);
+      tmpForm.submit(); // triggers a real navigation
+    });
+  </script>
